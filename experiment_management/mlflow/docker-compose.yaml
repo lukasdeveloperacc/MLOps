@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  mlflow:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./artifacts:/mlflow/artifacts
+    environment:
+      MLFLOW_TRACKING_URI: http://0.0.0.0:5000
+      AWS_ACCESS_KEY_ID: ""
+      AWS_SECRET_ACCESS_KEY: ""
+      AWS_SESSION_TOKEN: ""
+      AWS_DEFAULT_REGION: ""
+
+    command: >
+      mlflow server 
+        --backend-store-uri file:///mlflow/mlruns
+        --artifacts-destination s3://recon-test-artifacts/artifacts
+        --host 0.0.0.0
