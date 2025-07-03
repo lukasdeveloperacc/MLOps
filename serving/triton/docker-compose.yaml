@@ -11,13 +11,25 @@ services:
       - 1236:8002
     command: ["tail", "-f", "/dev/null"]
 
-  triton:
+  StableDiffusion:
     build:
-      dockerfile: Dockerfile
+      context: ./docker
+      dockerfile: StableDiffusion.Dockerfile
     volumes:
-      - ./model_repository:/models
+      - ./stable_diffusion_model_repository:/models
     ports:
       - 1234:8000
       - 1235:8001
       - 1236:8002
+    command: ["tritonserver", "--model-repository=/models"]
+  Hunyuan3d:
+    build:
+      context: ./docker
+      dockerfile: Hunyuan.Dockerfile
+    volumes:
+      - ./hunyuan3d_model_repository:/models
+    ports:
+      - 1237:8000
+      - 1238:8001
+      - 1239:8002
     command: ["tritonserver", "--model-repository=/models"]
