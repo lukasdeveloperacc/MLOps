@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  triton-dev:
+    image: nvcr.io/nvidia/tritonserver:25.06-py3
+    volumes:
+      - ./model_repository:/models
+    ports:
+      - 1234:8000
+      - 1235:8001
+      - 1236:8002
+    command: ["tail", "-f", "/dev/null"]
+
+  triton:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./model_repository:/models
+    ports:
+      - 1234:8000
+      - 1235:8001
+      - 1236:8002
+    command: ["tritonserver", "--model-repository=/models"]
