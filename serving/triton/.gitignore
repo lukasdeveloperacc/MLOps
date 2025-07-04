@@ -2,7 +2,8 @@
 *.plan
 *.pt
 *.onnx
-__pycache__/
 *.glb
+*.png
+__pycache__/
 Hunyuan3D-2/
 .cache/
