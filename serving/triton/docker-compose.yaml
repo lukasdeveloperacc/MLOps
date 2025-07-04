@@ -42,7 +42,7 @@ services:
       context: ./dockerfiles
       dockerfile: Hunyuan3D.Dockerfile
       args:
-        - TORCH_CUDA_ARCH_LIST="8.0" # A100
+        - TORCH_CUDA_ARCH_LIST="8.6" # A100
     volumes:
       - ./model_repository/hunyuan3d:/models/hunyuan3d
     ports:
