@@ -20,8 +20,7 @@ services:
 
   stablediffusion:
     build:
-      context: ./dockerfiles
-      dockerfile: StableDiffusion.Dockerfile
+      dockerfile: dockerfiles/StableDiffusion.Dockerfile
     volumes:
       - ./model_repository/stable_diffusion:/models/stable_diffusion
     ports:
@@ -33,16 +32,14 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
+              device_ids: [ '0' ]
               capabilities: [gpu]
-    command: ["tritonserver", "--model-repository=/models"]
 
   hunyuan3d:
     build:
-      context: ./dockerfiles
-      dockerfile: Hunyuan3D.Dockerfile
+      dockerfile: dockerfiles/Hunyuan3D.Dockerfile
     volumes:
-      - ./model_repository/hunyuan3d:/models/hunyuan3d
+      - ./.cache:/root/.cache
     ports:
       - 1237:8000
       - 1238:8001

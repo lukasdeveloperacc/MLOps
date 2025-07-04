@@ -5,17 +5,19 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip uninstall torch torchvision torchaudio && \
-    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu129
+    pip install --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu129
     
 ENV TORCH_CUDA_ARCH_LIST="8.0"
 RUN git clone https://github.com/Tencent-Hunyuan/Hunyuan3D-2.git && \
     cd Hunyuan3D-2 && \
-    pip install -r requirements.txt && \
-    pip install -e . && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir -e . && \
     cd hy3dgen/texgen/custom_rasterizer && \
     python3 setup.py install && \
     cd ../../.. && \
     cd hy3dgen/texgen/differentiable_renderer && \
     python3 setup.py install
+
+COPY ./model_repository/hunyuan3d /models/hunyuan3d
 
 CMD ["tritonserver", "--model-repository=/models"]
