@@ -1,6 +1,5 @@
 name: "hunyuan3d"
 backend: "python"
-max_batch_size: 1
 
 input [
   {
@@ -22,6 +21,6 @@ instance_group [
   {
     kind: KIND_GPU
     count: 1
-    gpus: [ 2 ]
+    gpus: [ 0 ]
   }
 ]

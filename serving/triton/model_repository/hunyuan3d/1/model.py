@@ -4,7 +4,9 @@ from hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline, FaceReducer, Floa
 from hy3dgen.texgen import Hunyuan3DPaintPipeline
 
 import numpy as np
-import io
+import io, logging, time
+
+logging.basicConfig(level=logging.INFO)
 
 try:
     import triton_python_backend_utils as pb_utils
@@ -12,12 +14,12 @@ except ImportError:
 
     class DummyOutput:
         def as_numpy(self) -> np.ndarray:
-            pass
+            return np.ndarray((-1))
 
     class pb_utils:
         @staticmethod
         def get_input_tensor_by_name(request, name: str) -> DummyOutput:
-            pass
+            return DummyOutput()
 
         class InferenceResponse:
             def __call__(self, *args, **kwds):
@@ -43,13 +45,15 @@ class TritonPythonModel:
         self.rembg = BackgroundRemover()
 
     def execute(self, requests):
+        start = time.time()
         responses = []
 
         for request in requests:
             # 1. Get input tensor
             input_tensor = pb_utils.get_input_tensor_by_name(request, "image")
             image_bytes = input_tensor.as_numpy().squeeze()  # np.object_ 배열
-            image = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+            logging.info(f"image_bytes type: {type(image_bytes)}")
+            image = Image.open(io.BytesIO(image_bytes.item())).convert("RGBA")
 
             # 2. Remove background
             image = self.rembg(image)
@@ -73,4 +77,5 @@ class TritonPythonModel:
             inference_response = pb_utils.InferenceResponse(output_tensors=[mesh_tensor])
             responses.append(inference_response)
 
+        logging.info(f"Latency : {time.time() - start} sec")
         return responses

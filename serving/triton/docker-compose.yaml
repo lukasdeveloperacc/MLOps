@@ -4,11 +4,18 @@ services:
   triton-dev:
     image: nvcr.io/nvidia/tritonserver:25.06-py3
     volumes:
-      - ./model_repository:/models
+      - ./model_repository/hunyuan3d:/models/hunyuan3d
     ports:
       - 1234:8000
       - 1235:8001
       - 1236:8002
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     command: ["tail", "-f", "/dev/null"]
 
   StableDiffusion:
@@ -16,18 +23,19 @@ services:
       context: ./docker
       dockerfile: StableDiffusion.Dockerfile
     volumes:
-      - ./stable_diffusion_model_repository:/models
+      - ./model_repository/stable_diffusion:/models/stable_diffusion
     ports:
       - 1234:8000
       - 1235:8001
       - 1236:8002
     command: ["tritonserver", "--model-repository=/models"]
+
   Hunyuan3d:
     build:
       context: ./docker
       dockerfile: Hunyuan.Dockerfile
     volumes:
-      - ./hunyuan3d_model_repository:/models
+      - ./model_repository/hunyuan3d:/models/hunyuan3d
     ports:
       - 1237:8000
       - 1238:8001
