@@ -18,9 +18,9 @@ services:
               capabilities: [gpu]
     command: ["tail", "-f", "/dev/null"]
 
-  StableDiffusion:
+  stablediffusion:
     build:
-      context: ./docker
+      context: ./dockerfiles
       dockerfile: StableDiffusion.Dockerfile
     volumes:
       - ./model_repository/stable_diffusion:/models/stable_diffusion
@@ -28,16 +28,31 @@ services:
       - 1234:8000
       - 1235:8001
       - 1236:8002
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     command: ["tritonserver", "--model-repository=/models"]
 
-  Hunyuan3d:
+  hunyuan3d:
     build:
-      context: ./docker
-      dockerfile: Hunyuan.Dockerfile
+      context: ./dockerfiles
+      dockerfile: Hunyuan3D.Dockerfile
+      args:
+        - TORCH_CUDA_ARCH_LIST="8.0" # A100
     volumes:
       - ./model_repository/hunyuan3d:/models/hunyuan3d
     ports:
       - 1237:8000
       - 1238:8001
       - 1239:8002
-    command: ["tritonserver", "--model-repository=/models"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

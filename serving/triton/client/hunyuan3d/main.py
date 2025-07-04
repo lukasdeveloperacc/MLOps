@@ -2,7 +2,7 @@ import tritonclient.http as httpclient
 import numpy as np
 
 # Triton 서버 주소 (HTTP)
-TRITON_URL = "localhost:1234"  # 기본 HTTP 포트
+TRITON_URL = "localhost:1237"  # 기본 HTTP 포트
 
 
 # 입력 이미지 로드 및 변환
