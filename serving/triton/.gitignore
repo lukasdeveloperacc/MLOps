@@ -7,3 +7,4 @@
 __pycache__/
 Hunyuan3D-2/
 .cache/
+.env
