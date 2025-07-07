@@ -10,7 +10,6 @@ services:
       - ./mlruns:/mlflow/mlruns
       - ./artifacts:/mlflow/artifacts
     environment:
-      MLFLOW_TRACKING_URI: http://0.0.0.0:5000
       AWS_ACCESS_KEY_ID: ""
       AWS_SECRET_ACCESS_KEY: ""
       AWS_SESSION_TOKEN: ""
