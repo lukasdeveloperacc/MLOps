@@ -18,13 +18,15 @@ services:
               capabilities: [gpu]
     command: ["tail", "-f", "/dev/null"]
 
-  llama:
+  llama-vllm:
     image: nvcr.io/nvidia/tritonserver:25.06-vllm-python-py3
     environment:
       HF_TOKEN: ${HF_TOKEN}
     volumes:
       - ./.cache/huggingface:/root/.cache/huggingface
     working_dir: /opt/tritonserver/python/openai
+    ports:
+      - 9000:9000
     deploy:
       resources:
         reservations:
@@ -32,7 +34,26 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    command: [python3, openai_frontend/main.py, --model-repository, tests/vllm_models, --tokenizer, meta-llama/Meta-Llama-3.1-8B-Instruct]
+    command: [ python3, openai_frontend/main.py, --model-repository, tests/vllm_models, --tokenizer, meta-llama/Meta-Llama-3.1-8B-Instruct, --tool-call-parser, llama3 ]
+
+  # TODO
+  # llama-trt:
+  #   build:
+  #     dockerfile: dockerfiles/LammaTRT.Dockerfile
+  #   environment:
+  #     HF_TOKEN: ${HF_TOKEN}
+  #   volumes:
+  #     - ./.cache/huggingface:/root/.cache/huggingface
+  #   ports:
+  #     - 9000:9000
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: 1
+  #             capabilities: [gpu]
+  #   command: ["tail", "-f", "/dev/null"]
 
   stablediffusion:
     build:
