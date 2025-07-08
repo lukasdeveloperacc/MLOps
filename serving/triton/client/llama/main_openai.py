@@ -15,7 +15,7 @@ completion = client.chat.completions.create(
         },
         {"role": "user", "content": "What are LLMs? Please tell me as korean"},
     ],
-    max_tokens=256,
+    max_tokens=4096,
 )
 
 print(completion.choices[0].message.content)
