@@ -76,7 +76,8 @@ services:
     build:
       dockerfile: dockerfiles/Hunyuan3D.Dockerfile
     volumes:
-      - ./.cache:/root/.cache
+      - ~/.cache:/root/.cache
+      - ~/.cache:/root/.u2net
     ports:
       - 1237:8000
       - 1238:8001
