@@ -4,16 +4,15 @@
 # Install Terraform
 - [Installation Docs](https://developer.hashicorp.com/terraform/install#linux)
 
-# Install RKE2
+# Kubeflow
 ## On-prem
 ```bash
-cd install/onprem
+sh onprem-rke2/install.sh
+sh tools/kubectl/install.sh
+sh tools/helm/install.sh
+sh cert-manager/install.sh
+sh rancher/install.sh
+sh persistent_volume/local_path_provisioner/install.sh
+sh kubeflow/pipelines/install.sh
+kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8080:80
 ```
-- Locally
-  ```bash
-  terraform plan -var="is_local=true"
-  ```
-- Remote
-  ```bash
-  terraform plan -var="is_local=false" -var="host_ip=" -var="ssh_user=" -var="private_key_path="
-  ```
