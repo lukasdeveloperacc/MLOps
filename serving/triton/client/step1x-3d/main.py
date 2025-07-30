@@ -16,7 +16,7 @@ def load_image(path: str) -> np.ndarray:
 client = httpclient.InferenceServerClient(url=TRITON_URL, verbose=False, network_timeout=360.0)
 
 # 이미지 준비
-image_np = load_image("assets/test.png")
+image_np = load_image("assets/pikachu.png")
 
 # 입력 텐서 생성
 input_tensor = httpclient.InferInput(name="image", shape=image_np.shape, datatype="BYTES")
