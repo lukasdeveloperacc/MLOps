@@ -49,35 +49,41 @@ class TritonPythonModel:
         )
 
     def execute(self, requests):
-        start = time.time()
-        responses = []
+        try:
+            start = time.time()
+            responses = []
 
-        for request in requests:
-            # 1. Get input tensor
-            input_tensor = pb_utils.get_input_tensor_by_name(request, "image")
-            image_bytes = input_tensor.as_numpy().squeeze()  # np.object_ 배열
-            logging.info(f"image_bytes type: {type(image_bytes)}")
-            image = Image.open(io.BytesIO(image_bytes.item())).convert("RGBA")
-            filename = f"{uuid.uuid4()}.png"
-            image.save(filename)
+            for request in requests:
+                # 1. Get input tensor
+                input_tensor = pb_utils.get_input_tensor_by_name(request, "image")
+                image_bytes = input_tensor.as_numpy().squeeze()  # np.object_ 배열
+                logging.info(f"image_bytes type: {type(image_bytes)}")
+                image = Image.open(io.BytesIO(image_bytes.item())).convert("RGBA")
+                filename = f"{uuid.uuid4()}.png"
+                image.save(filename)
 
-            generator = torch.Generator(device=self._geo_pipeline.device)
-            generator.manual_seed(2025)
-            out = self._geo_pipeline(filename, guidance_scale=7.5, num_inference_steps=50, generator=generator)
-            glb_filename = f"{filename.split(".")[0]}.glb"
-            out.mesh[0].export(glb_filename)
+                generator = torch.Generator(device=self._geo_pipeline.device)
+                generator.manual_seed(2025)
+                out = self._geo_pipeline(filename, guidance_scale=7.5, num_inference_steps=50, generator=generator)
+                glb_filename = f"{filename.split('.')[0]}.glb"
+                out.mesh[0].export(glb_filename)
 
-            mesh = trimesh.load(glb_filename)
-            mesh = remove_degenerate_face(mesh)
-            mesh = reduce_face(mesh)
+                mesh = trimesh.load(glb_filename)
+                mesh = remove_degenerate_face(mesh)
+                mesh = reduce_face(mesh)
 
-            textured_mesh = self._texture_pipeline(filename, mesh, seed=2025)
-            textured_mesh.export(glb_filename)
+                textured_mesh = self._texture_pipeline(filename, mesh, seed=2025)
+                textured_mesh.export(glb_filename)
 
-            with open(glb_filename, "rb") as glb_bytes:
-                mesh_tensor = pb_utils.Tensor("mesh", np.array([glb_bytes], dtype=object))
-                inference_response = pb_utils.InferenceResponse(output_tensors=[mesh_tensor])
-                responses.append(inference_response)
+                with open(glb_filename, "rb") as f:
+                    glb_bytes = f.read()
+                    mesh_tensor = pb_utils.Tensor("mesh", np.array([glb_bytes], dtype=object))
+                    inference_response = pb_utils.InferenceResponse(output_tensors=[mesh_tensor])
+                    responses.append(inference_response)
 
-        logging.info(f"Latency : {time.time() - start} sec")
-        return responses
+            logging.info(f"Latency : {time.time() - start} sec")
+            return responses
+
+        finally:
+            os.remove(filename)
+            os.remove(glb_filename)

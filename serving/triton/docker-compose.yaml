@@ -94,7 +94,7 @@ services:
     volumes:
       - ./model_repository/step1x-3d:/models/step1x-3d
       - ~/.cache:/root/.cache
-      - ~/.cache:/root/.u2net
+      - ~/.u2net:/root/.u2net
     ports:
       - 1237:8000
       - 1238:8001
@@ -106,4 +106,3 @@ services:
             - driver: nvidia
               device_ids: [ '0' ]
               capabilities: [gpu]
-    command: ["tail", "-f", "/dev/null"]
