@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   triton-dev:
     image: nvcr.io/nvidia/tritonserver:25.06-py3
@@ -78,6 +76,25 @@ services:
     volumes:
       - ~/.cache:/root/.cache
       - ~/.cache:/root/.u2net
+    ports:
+      - 1237:8000
+      - 1238:8001
+      - 1239:8002
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ '0' ]
+              capabilities: [gpu]
+
+  step1x-3d:
+    build:
+      dockerfile: dockerfiles/Step1X3D.Dockerfile
+    volumes:
+      - ./model_repository/step1x-3d:/models/step1x-3d
+      - ~/.cache:/root/.cache
+      - ~/.u2net:/root/.u2net
     ports:
       - 1237:8000
       - 1238:8001

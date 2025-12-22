@@ -6,7 +6,10 @@
 sh ../cert-manager/install.sh
 
 # Rancher
-IP="172.188.1.56"
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+kubectl create namespace cattle-system
+
+IP="172.30.1.149"
 helm upgrade rancher rancher-stable/rancher \
   --namespace cattle-system \
   --set hostname="${IP}.sslip.io" \
