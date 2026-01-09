@@ -71,7 +71,7 @@ resources:
 - ../applications/pipeline/upstream/env/cert-manager/platform-agnostic-multi-user  # Pipeline definitions stored in the database
 # - ../applications/pipeline/upstream/env/cert-manager/platform-agnostic-multi-user-k8s-native # Pipeline Definitions Stored as Kubernetes Resources
 # Katib
-- ../applications/katib/upstream/installs/katib-with-kubeflow
+# - ../applications/katib/upstream/installs/katib-with-kubeflow
 # Central Dashboard
 - ../applications/centraldashboard/overlays/oauth2-proxy
 # Admission Webhook
@@ -100,7 +100,7 @@ resources:
 - ../applications/kserve/kserve
 - ../applications/kserve/models-web-app/overlays/kubeflow
 # Spark Operator
-- ../applications/spark/spark-operator/overlays/kubeflow
+# - ../applications/spark/spark-operator/overlays/kubeflow
 
 # Ray is an experimental integration
 # Here is the documentation for Ray: https://docs.ray.io/en/latest/
