@@ -7,3 +7,9 @@ requires-python = ">=3.13"
 dependencies = [
     "kfp>=2.15.2",
 ]
+
+[tool.uv.workspace]
+members = [
+    "pipelines/kubeflow/보금자리론대출QA-LLama-Tuning/scripts",
+    "pipelines/kubeflow/보금자리론대출QA-LLama-Tuning/components/data_prep",
+]

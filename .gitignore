@@ -1,1 +1,4 @@
 .venv/
+
+# Data files (local only)
+pipelines/kubeflow/보금자리론대출QA-LLama-Tuning/data/

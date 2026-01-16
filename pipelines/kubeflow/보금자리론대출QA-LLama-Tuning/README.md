@@ -37,13 +37,8 @@
 - **원문 FAQ 텍스트는 repo에 커밋하지 않습니다.**
 - 대신 `scripts/scrape_faq.py` 실행으로 로컬에서 데이터가 생성됩니다.
 
-### Dataset format (chat SFT JSONL)
+### Dataset format (LLaMA Instruct SFT JSONL)
 ```json
 {
-  "messages": [
-    {"role": "system", "content": "너는 보금자리론 FAQ 상담 도우미야. 제공된 FAQ 범위 내에서만 답하고, 확실하지 않으면 공식 안내로 유도해."},
-    {"role": "user", "content": "질문..."},
-    {"role": "assistant", "content": "답변..."}
-  ],
-  "meta": {"source": "HF FAQ", "url": "...", "item_id": "...", "retrieved_at": "YYYY-MM-DD"}
+  "text": "<s>[INST] <<SYS>>\n너는 보금자리론 FAQ 상담 도우미야. 제공된 FAQ 범위 내에서만 답하고, 확실하지 않으면 공식 안내로 유도해.\n<</SYS>>\n\n보금자리론 신청 자격이 어떻게 되나요? [/INST] 만 19세 이상 무주택자로서... </s>"
 }
