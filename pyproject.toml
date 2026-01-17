@@ -13,4 +13,5 @@ members = [
     "pipelines/kubeflow/보금자리론대출QA-LLama-Tuning/scripts",
     "pipelines/kubeflow/보금자리론대출QA-LLama-Tuning/components/data_prep",
     "pipelines/kubeflow/보금자리론대출QA-LLama-Tuning/components/train",
+    "pipelines/kubeflow/보금자리론대출QA-LLama-Tuning/components/test",
 ]
